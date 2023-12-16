@@ -25,9 +25,9 @@ type Point struct {
 
 // PointState stores the current state of a point (x,y) in the grid
 type PointState struct {
-	Operation   string // (e.g. ".", "/", "\", "|", "-")
-	Energized   bool
-	ViditedFrom []Point
+	Operation    string // (e.g. ".", "/", "\", "|", "-")
+	Energized    bool
+	VisistedFrom []Point // Stores the points from which this point was visited
 }
 
 // A Grid is a map of Points with their current states
@@ -57,7 +57,7 @@ type PacMan struct {
 	IsDead        bool
 }
 
-// PacMan.Move() moved the PacMan one step ahead
+// PacMan.Move() moves the PacMan one step ahead
 func (p *PacMan) Move(g *Grid, boundary *Point) bool {
 
 	// return if PacMan is dead
@@ -90,20 +90,19 @@ func (p *PacMan) Move(g *Grid, boundary *Point) bool {
 	next := g.Grid[p.Position]
 
 	// if a point is visited from the same direction twice, PacMan will die
-	for _, v := range next.ViditedFrom {
+	for _, v := range next.VisistedFrom {
 		if v == oldPoint {
 			p.IsDead = true
 			return false
 		}
 	}
 
-	// update state 
-	next.Energized = true
-	next.ViditedFrom = append(next.ViditedFrom, oldPoint)
+	next.Energized = true  // marked as energized
+	next.VisistedFrom = append(next.VisistedFrom, oldPoint) // add visited from point
 	p.PointState = next
 	g.Grid[p.Position] = next
 
-	// Execute the PointState operation
+	// Execute the PointState operations
 	switch p.PointState.Operation {
 	case ".":
 		// Do nothing
@@ -192,7 +191,7 @@ func CreateGrid() *Grid {
 				}
 
 				p := Point{Row: n, Col: j}
-				s := PointState{Operation: string(char), Energized: false, ViditedFrom: make([]Point, 0)}
+				s := PointState{Operation: string(char), Energized: false, VisistedFrom: make([]Point, 0)}
 				originalGrid.Grid[p] = s
 			}
 		}
