@@ -37,12 +37,12 @@ type Grid struct {
 	Workers  []*PacMan // Stores PacMan workers
 }
 
-// Grid.next() moves all workers one step ahead
-func (g *Grid) next() bool {
+// Grid.Next() moves all workers one step ahead
+func (g *Grid) Next() bool {
 	hasNext := false
 
 	for _, worker := range g.Workers {
-		if worker.move(g, &g.Boundary) {
+		if worker.Move(g, &g.Boundary) {
 			hasNext = true
 		}
 	}
@@ -57,10 +57,10 @@ type PacMan struct {
 	IsDead        bool
 }
 
-// PacMan.move() moved the PacMan one step ahead
-func (p *PacMan) move(g *Grid, boundary *Point) bool {
+// PacMan.Move() moved the PacMan one step ahead
+func (p *PacMan) Move(g *Grid, boundary *Point) bool {
 
-	// return false if PacMan is dead
+	// return if PacMan is dead
 	if p.IsDead {
 		return false
 	}
@@ -97,7 +97,7 @@ func (p *PacMan) move(g *Grid, boundary *Point) bool {
 		}
 	}
 
-	// update the point states
+	// update state 
 	next.Energized = true
 	next.ViditedFrom = append(next.ViditedFrom, oldPoint)
 	p.PointState = next
@@ -164,10 +164,9 @@ func (p *PacMan) move(g *Grid, boundary *Point) bool {
 	return true
 }
 
-// CreateGrid() reads the input file and creates a grid
-
+// CreateGrid reads the input file and creates a grid
 func CreateGrid() *Grid {
-	// Use sync.Once to ensure that initialization code runs only once
+	// Read the input file only once
 	once.Do(func() {
 		originalGrid = Grid{
 			Grid: make(map[Point]PointState),
@@ -182,7 +181,7 @@ func CreateGrid() *Grid {
 		n := -1
 		m := -1
 
-		// Set default values for the grid
+		// Set values from file
 		for scanner.Scan() {
 			line := scanner.Text()
 			n++
@@ -201,7 +200,7 @@ func CreateGrid() *Grid {
 		originalGrid.Boundary = Point{Row: n, Col: m}
 	})
 
-	// Create a new grid of original state
+	// Create a new grid with its original state
 	g := &Grid{
 		Grid: make(map[Point]PointState),
 	}

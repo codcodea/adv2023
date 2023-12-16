@@ -5,7 +5,6 @@ import (
 )
 
 func main() {
-
 	// Part One
 	pacMan := PacMan{
 		Position:      Point{Row: 0, Col: -1},
@@ -16,11 +15,10 @@ func main() {
 	fmt.Println("Part One:", res)
 
 	// Part Two
-	pacMens := partTwoPacMens()
-
+	pacMans := partTwoPacMans()
 	max := 0
 
-	for _, p := range pacMens {
+	for _, p := range pacMans {
 		if r := worker(p); r > max {
 			max = r
 		}
@@ -33,7 +31,7 @@ func worker(p *PacMan) int {
 	grid.Workers = append(grid.Workers, p)
 
 	for {
-		valid := grid.next()
+		valid := grid.Next()
 		if !valid {
 			break
 		}
@@ -51,7 +49,8 @@ func collectEnergized(g *Grid) int {
 	return count
 }
 
-func partTwoPacMens() []*PacMan {
+// Generate a list of PacMans for each starting point on the grid
+func partTwoPacMans() []*PacMan {
 	grid := CreateGrid()
 	rows := grid.Boundary.Row
 	cols := grid.Boundary.Col
