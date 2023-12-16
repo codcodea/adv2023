@@ -32,36 +32,36 @@ type List []Point
 
 func main() {
 
-	gallaxyList, expandedSpace := ReadFile()
+	gList, eSpace := ReadFile()
 
 	// Part One
-	expandFactor := 2
-	dist := calculateDistance(gallaxyList, expandedSpace, expandFactor)
+	expandBy := 2
+	dist := calculateDistance(gList, eSpace, expandBy)
 	fmt.Println("Part One:", dist)
 
 	// Part Two
-	expandFactor = 1000000
-	dist = calculateDistance(gallaxyList, expandedSpace, expandFactor)
+	expandBy = 1000000
+	dist = calculateDistance(gList, eSpace, expandBy)
 	fmt.Println("Part Two:", dist)
 }
 
-// Calculating the total distance between all points
 func calculateDistance(list List, e ExpandedSpace, expandFactor int) int {
 	dist := 0
 
-	// For each combination of points (x,y) in space
+	// For each combination of points (x,y) 
 	for i := 0; i < len(list); i++ {
 		p1 := list[i]
+
 		for j := i + 1; j < len(list); j++ {
 			p2 := list[j]
 
-			// Calculate Manhattan distance between two points
+			// Calculate Manhattan distance 
 			m := manhattanDistance(p1, p2)
 
-			// Calculate the number of expanded space borders the points are passing through
+			// Calculate how many borders of expanded space the points are passing through
 			b := bordersCount(p1, p2, e)
 
-			// Calculate the point distance (pd) with regard to the expand factor
+			// Calculate the point distance (pd) 
 			pd := m + (b * (expandFactor - 1))
 
 			// Add to total distance
@@ -71,30 +71,31 @@ func calculateDistance(list List, e ExpandedSpace, expandFactor int) int {
 	return dist
 }
 
-// Calculate how many borders of expanded space the points are passing through 
 func bordersCount(p1, p2 Point, e ExpandedSpace) int {
-	r := 0
-	c := 0
+	
+	count := 0
 
-	rAbs := int(math.Abs(float64(p1.x - p2.x)))         // absoule row-distance between two points
-	rMin := int(math.Min(float64(p1.x), float64(p2.x))) // minimum row index between two points
+	// Traverse X-axis
+	xAbs := int(math.Abs(float64(p1.x - p2.x)))        
+	xMin := int(math.Min(float64(p1.x), float64(p2.x))) 
 
-	for i := rMin; i <= rAbs+rMin; i++ {
-		// if row index exists in expanded space, increment row border count
+	for i := xMin; i <= xAbs+xMin; i++ {
+		// if index exists in expanded space map, increment count
 		if e.rows[i] {
-			r++
+			count++
 		}
 	}
 
-	cAbs := int(math.Abs(float64(p1.y - p2.y)))
-	cMin := int(math.Min(float64(p1.y), float64(p2.y)))
+	// Traverse Y-axis
+	yAbs := int(math.Abs(float64(p1.y - p2.y)))
+	yMin := int(math.Min(float64(p1.y), float64(p2.y)))
 
-	for j := cMin; j <= cAbs+cMin; j++ {
+	for j := yMin; j <= yAbs+yMin; j++ {
 		if e.cols[j] {
-			c++
+			count++
 		}
 	}
-	return r + c
+	return count
 }
 
 func manhattanDistance(p1 Point, p2 Point) int {

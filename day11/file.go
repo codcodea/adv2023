@@ -13,14 +13,13 @@ const (
 
 func ReadFile() (List, ExpandedSpace) {
 	s := make(Space, 0) // init empty space
-
-	space := populateSpace(s)
+	space := getSpace(s)
 	maps := getExpandedSpace(space)
-	list := makeListOfPoints(space)
-	return list, maps
+	points := getPoints(space)
+	return points, maps
 }
 
-func populateSpace(s Space) Space {
+func getSpace(s Space) Space {
 	file, err := os.Open(input)
 	checkErr(err)
 
@@ -38,8 +37,10 @@ func getExpandedSpace(s Space) ExpandedSpace {
 		cols: make(map[int]bool),
 	}
 
-	// for each row
+	// for each row in space
 	for i, row := range s {
+
+		// check if row has a galaxy
 		hasGallaxy := strings.Contains(row, "#")
 
 		// init rows map 
@@ -70,7 +71,7 @@ func getExpandedSpace(s Space) ExpandedSpace {
 }
 
 // Create a list of galaxy points (x, y) in space
-func makeListOfPoints(s Space) List {
+func getPoints(s Space) List {
 	list := make(List, 0)
 
 	for i, line := range s {
