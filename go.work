@@ -1,3 +1,5 @@
 go 1.21.1
 
+use day7
 use day11
+use day16

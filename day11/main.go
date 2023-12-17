@@ -11,10 +11,10 @@ import (
 // - Create a list of galaxy points (x, y) in space
 
 // Part One:
-// Calculate total Manhattan distance between all points x expandFactor (x2)
+// Calculate total Manhattan distance between all points x expandBy (x2)
 
 // Part Two:
-// Calculate total Manhattan distance between all points x expandFactor (x1000000)
+// Calculate total Manhattan distance between all points x expandBy (x1000000)
 
 type Space []string
 
@@ -31,7 +31,6 @@ type Point struct {
 type List []Point
 
 func main() {
-
 	gList, eSpace := ReadFile()
 
 	// Part One
@@ -72,7 +71,6 @@ func calculateDistance(list List, e ExpandedSpace, expandFactor int) int {
 }
 
 func bordersCount(p1, p2 Point, e ExpandedSpace) int {
-	
 	count := 0
 
 	// Traverse X-axis
